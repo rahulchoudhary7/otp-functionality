@@ -1,15 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import './OtpPopup.css'
 
-function OtpPopup(props) {
+function OtpPopup({setState}) {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const inputRefs = useRef([]);
+  const [otpFilled, setOtpFilled] = useState(false)
+
+  console.log(otp)
 
   useEffect(() => {
     inputRefs.current[0].focus();
   }, []);
+
+  useEffect(() => {
+    setOtpFilled(otp.every(otp => otp !== ''))
+  },[otp])
 
   const handleChange = (index, event) => {
     const value = event.target.value;
@@ -66,36 +71,10 @@ function OtpPopup(props) {
   };
   
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const otpString = otp.join('');
-
-    if (!/^\d{6}$/.test(otpString)) {
-      setError('Please enter a valid OTP.');
-      setSuccess('');
-      return;
-    }
-
-    try {
-      const response = await axios.post('/verify-otp', { otp: otpString });
-
-      if (response.data.success) {
-        setSuccess('OTP verified successfully.');
-        setError('');
-        props.onVerified();
-      } else {
-        setError(response.data.message);
-        setSuccess('');
-      }
-    } catch (error) {
-      setError('An error occurred while verifying the OTP. Please try again later.');
-      setSuccess('');
-    }
-  };
-
+  
   return (
     <div className="otp-popup">
-      <form onSubmit={handleSubmit}>
+      <form>
         <h2>Enter OTP</h2>
         <div className="otp-inputs">
           {otp.map((digit, index) => (
@@ -110,9 +89,14 @@ function OtpPopup(props) {
             />
           ))}
         </div>
-        {error && <div className="error">{error}</div>}
-        {success && <div className="success">{success}</div>}
-        <button type="submit">Verify OTP</button>
+        <button type="submit" onClick = {
+          ()=> {
+            if(otpFilled) {
+              setState(false)
+            } else {
+              setState(true)
+            }
+          }} disabled ={!otpFilled}>Verify OTP</button>
       </form>
     </div>
   );

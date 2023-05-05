@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
 import OtpPopup from './OtpPopup';
+import './App.css'
 
 function App() {
   const [showOtpPopup, setShowOtpPopup] = useState(false);
+  console.log(showOtpPopup)
 
-  const handleShowOtpPopup = () => {
-    setShowOtpPopup(true);
-  };
-
-  const handleCloseOtpPopup = () => {
-    setShowOtpPopup(false);
-  };
-
+  const handleClick = () => {
+    setShowOtpPopup(true)
+  }
   return (
     <div className="App">
-      <button onClick={handleShowOtpPopup}>Verify Phone</button>
-      {showOtpPopup && <OtpPopup onClose={handleCloseOtpPopup} />}
+      {!showOtpPopup ? <button id = 'btn' onClick = {handleClick}>Verify Phone</button> : <OtpPopup setState ={setShowOtpPopup}/>}
     </div>
   );
 }
