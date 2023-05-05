@@ -4,7 +4,6 @@ import './App.css'
 
 function App() {
   const [showOtpPopup, setShowOtpPopup] = useState(false);
-  console.log(showOtpPopup)
 
   const handleClick = () => {
     setShowOtpPopup(true)

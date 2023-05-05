@@ -6,8 +6,6 @@ function OtpPopup({setState}) {
   const inputRefs = useRef([]);
   const [otpFilled, setOtpFilled] = useState(false)
 
-  console.log(otp)
-
   useEffect(() => {
     inputRefs.current[0].focus();
   }, []);
