@@ -60,12 +60,19 @@ function OtpPopup({setState}) {
     // paste the OTP from the clipboard
     if (event.key === 'v' && event.ctrlKey) {
       const clipboardData = event.clipboardData || window.clipboardData;
-      const pastedData = clipboardData.getData('Text');
-  
-      if (/^\d{6}$/.test(pastedData)) {
-        setOtp(pastedData.split(''));
+      
+      if (clipboardData) {
+        const pastedData = clipboardData.getData('Text');
+        if (/^\d{6}$/.test(pastedData)) {
+          setOtp(pastedData.split(''));
+        }
       }
+
     }
+    
+    
+    
+    
   };
   
 
@@ -83,6 +90,13 @@ function OtpPopup({setState}) {
               value={digit}
               onChange={(event) => handleChange(index, event)}
               onKeyDown={(event) => handleKeyDown(index, event)}
+              onPaste={(event) => {
+                const pastedData = event.clipboardData.getData('Text');
+                if (/^\d{6}$/.test(pastedData)) {
+                  setOtp(pastedData.split(''));
+                  inputRefs.current[inputRefs.current.length - 1].focus();
+                }
+              }}
               ref={(el) => (inputRefs.current[index] = el)}
             />
           ))}
@@ -91,6 +105,7 @@ function OtpPopup({setState}) {
           ()=> {
             if(otpFilled) {
               setState(false)
+              alert("OTP verified successfully");
             } else {
               setState(true)
             }
